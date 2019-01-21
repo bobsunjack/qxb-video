@@ -19,6 +19,8 @@ public class MyWebSocket {
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
     private Session session;
 
+    private boolean start = true;
+
     /**
      * 连接建立成功调用的方法
      */
@@ -56,14 +58,19 @@ public class MyWebSocket {
     public void onMessage(String message, Session session) {
         System.out.println("来自客户端的消息:" + message);
 
+        if("cmd:start".equals(message)){
+            this.start = true;
+        }else  if("cmd:stop".equals(message)){
+            this.start = false;
+        }
         //群发消息
-        for (MyWebSocket item : webSocketSet) {
+        /*for (MyWebSocket item : webSocketSet) {
             try {
                 item.sendMessage(VideoRecordToImg.pics.take().toString());
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     /**
@@ -88,7 +95,9 @@ public class MyWebSocket {
     public static void sendInfo(String message) throws IOException {
         for (MyWebSocket item : webSocketSet) {
             try {
-                item.sendMessage(message);
+                if(item.isStart()) {
+                    item.sendMessage(message);
+                }
             } catch (IOException e) {
                 continue;
             }
@@ -105,5 +114,13 @@ public class MyWebSocket {
 
     public static synchronized void subOnlineCount() {
         MyWebSocket.onlineCount--;
+    }
+
+    public boolean isStart() {
+        return start;
+    }
+
+    public void setStart(boolean start) {
+        this.start = start;
     }
 }

@@ -11,6 +11,7 @@ public class VideoTestApplicationTests {
 
     @Test
     public void contextLoads() {
+        System.out.println(5%5);
     }
 
 }

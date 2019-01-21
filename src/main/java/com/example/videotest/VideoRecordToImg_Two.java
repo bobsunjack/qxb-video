@@ -1,6 +1,11 @@
 package com.example.videotest;
 
-import org.bytedeco.javacv.*;
+import org.bytedeco.javacv.FFmpegFrameGrabber;
+import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.FrameRecorder;
+import org.bytedeco.javacv.Java2DFrameConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
@@ -10,11 +15,8 @@ import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public class VideoRecordToImg extends Thread {
-    private static final Logger logger = LoggerFactory.getLogger(VideoRecordToImg.class);
+public class VideoRecordToImg_Two extends Thread {
+    private static final Logger logger = LoggerFactory.getLogger(VideoRecordToImg_Two.class);
     public static BlockingQueue pics = new ArrayBlockingQueue(10000);
     public static int begin = 0;
 
@@ -75,7 +77,7 @@ public class VideoRecordToImg extends Thread {
             int count = 0;
             while (status && (frame = grabber.grabFrame()) != null) {
 
-                if ((count % 5 == 0) || (count % 17 == 0)) {
+                if ((count % 5 == 0) || (count % 9 == 0)|| (count % 11 == 0)) {
 
                     if (count > 85)
                         count = 1;
@@ -105,7 +107,7 @@ public class VideoRecordToImg extends Thread {
                 grabber.stop();
             }
             begin = 0;
-            new VideoRecordToImg().start();
+            new VideoRecordToImg_Two().start();
         }
     }
 
